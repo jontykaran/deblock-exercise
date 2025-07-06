@@ -2,16 +2,45 @@
 
 **My approach and notes:**
 
-I have created all the supplier adapters and their DTO in an single directory to separate out their implementations. 
-All supplier (crazyAir, Toughjet or any new supplier) are injected in the main service layer/port (SearchFlightService) using spring dependency injection (therefore we do not have to update service layer if a new supplier is added, following SOLID principles)
+Looking at the key requirements to get flight details from external suppliers and combine them as a response through the `/flights` api, 
+this implementation includes the following:
+- I have created all the supplier adapters and their DTO in an single directory to separate out their implementations. This ensures modularity and future extensibility (Therefore adding new suppliers).
+- All supplier (crazyAir, Toughjet or any new supplier) are injected in the main service layer/port (SearchFlightService) using spring dependency injection (therefore we do not have to update service layer if a new supplier is added, following SOLID principles)
+- Both the supplier class converts supplier DTO response to domain DTO (`FlightResponse`). I was thinking to keep mapping logic separate but for simplicity of this test kept it in the same class. 
+- The Service layer `SearchFlightService` (like usage in Hexagonal arch), gets all the supplier response in an asyc response and combine them before sorting based on fare.
+- Since hexagonal architecture pattern was new to me, I had a look and tried following the same structure, though some of my file structure looks like MVC pattern.
+- Implemented two exceptions - one for supplier exceptions nd other for service exceptions. Main endpoint (service layer) would only use service exception.
+- Inputs are validated using annotations, keeping the contract strict
 
-- Since hexagonal architecture pattern was new to me, I had a look and tried following the same structure, though some of my file structure looks like MVC pattern. 
-- 
+***Testing***
+- Have used wiremock for all the tests
+- `ExerciseApplicationTests` simulates real-world scenarios using mocked external APIs on ports 8001 and 8002. (chose similar port number as service run)
+Ensures the application behaves correctly when:
+  1. One or both suppliers return flights
+  2. No flights are available
+  3. all supplier returns error
+  4. Invalid input sent
+- Test are also implemented for each adapter class to test and stimulate supplier response and testing mapper conversion.
+- Controller tests are also added to test controller in isolation
 
+***Future work:***
+
+Few suggestions I would implement for a production based code
+- Move mapper logic in a separate class (maybe use library like mapstruct, as most of the domain names are similar and basic computation was required for tough jet)
+- Implement Cucumber tests as an alternative for integration tests and acceptance tests
+- Read more about hexagonal arch and implement it better
+- Maybe look further into exception handling (kept it very simple for now)
+- Implement test reports like jacoco to enforce test coverage
+- Implement lint or other library for enforcing coding and import standards
+
+
+Test evidence: 
+- Application stating up ![img.png](img.png)
+- Test run (integration test) ![img_1.png](img_1.png)
+- All tests running ![img_2.png](img_2.png)
+-----------------------------------------
 **Background:**
-
 DeblockFlights is a flights search solution which aggregates flight results initially from 2 different suppliers (CrazyAir and ToughJet). A future iteration (not part of the test) may add more suppliers.
-
 
 **What is required:**
 

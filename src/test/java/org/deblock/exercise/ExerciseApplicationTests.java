@@ -24,14 +24,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {
-		"crazyair.api.url=http://localhost:9090/flights",
-		"toughjet.api.url=http://localhost:9091/flights"
+		"crazyair.api.url=http://localhost:8001/flights",
+		"toughjet.api.url=http://localhost:8002/flights"
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ExerciseApplicationTests {
 
-	private WireMockServer crazyAirMockServer = new WireMockServer(9090);
-	private WireMockServer toughJetMockServer = new WireMockServer(9091);
+	private WireMockServer crazyAirMockServer = new WireMockServer(8001);
+	private WireMockServer toughJetMockServer = new WireMockServer(8002);
 
 	@Autowired
 	private MockMvc mockMvc;
