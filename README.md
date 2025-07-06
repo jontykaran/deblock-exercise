@@ -1,5 +1,13 @@
 **Deblock - Problem to be solved**
 
+**My approach and notes:**
+
+I have created all the supplier adapters and their DTO in an single directory to separate out their implementations. 
+All supplier (crazyAir, Toughjet or any new supplier) are injected in the main service layer/port (SearchFlightService) using spring dependency injection (therefore we do not have to update service layer if a new supplier is added, following SOLID principles)
+
+- Since hexagonal architecture pattern was new to me, I had a look and tried following the same structure, though some of my file structure looks like MVC pattern. 
+- 
+
 **Background:**
 
 DeblockFlights is a flights search solution which aggregates flight results initially from 2 different suppliers (CrazyAir and ToughJet). A future iteration (not part of the test) may add more suppliers.
